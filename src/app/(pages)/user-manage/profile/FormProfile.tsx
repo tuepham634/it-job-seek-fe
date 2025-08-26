@@ -8,7 +8,7 @@ import 'filepond/dist/filepond.min.css';
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-
+import { Toaster, toast } from 'sonner'
 // Đăng ký plugins
 registerPlugin(
   FilePondPluginFileValidateType,
@@ -68,7 +68,7 @@ export const FormProfile = () => {
     }
   }, [infoUser]);
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit =  async (event: any) => {
     event.preventDefault();
 
     const fullName = event.target.fullName.value;
@@ -87,20 +87,29 @@ export const FormProfile = () => {
       formData.append("phone", phone);
       formData.append("avatar", avatar);
 
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
+      const promise =  fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
         method: "PATCH",
         body: formData,
         credentials: "include", // Gửi kèm cookie
       })
-        .then(res => res.json())
-        .then(data => {
-          console.log(data);
-        })
+        .then(async (res) => {
+          const data = await res.json();
+          if (data.code === "error") {
+            throw new Error(data.message);
+          }
+          return data;
+        });
+        toast.promise(promise, {
+        loading: 'Đang cập nhật...',
+        success: (data) => `${data.message}`, // data ở đây là kết quả trả về khi `resolve`
+        error: (err) => err.message || 'Đã xảy ra lỗi!',
+      });
     }
   }
 
   return (
     <>
+      <Toaster position="top-right" richColors />
       {infoUser && (
         <form onSubmit={handleSubmit} id="profileForm" action="" className="grid sm:grid-cols-2 grid-cols-1 gap-x-[20px] gap-y-[15px]">
           <div className="sm:col-span-2">
