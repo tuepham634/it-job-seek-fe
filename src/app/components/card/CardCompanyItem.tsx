@@ -2,7 +2,11 @@
 import Link from "next/link"
 import { FaUserTie } from "react-icons/fa6"
 
-export const CardCompanyItem = () => {
+export const CardCompanyItem = (props: {
+  item :any
+}) => {
+  const { item } = props;
+
   return (
     <>
       <Link 
@@ -24,20 +28,20 @@ export const CardCompanyItem = () => {
           }}
         >
           <img 
-            src="/assets/images/demo-cong-ty-1.png" 
-            alt="LG Electronics Development Vietnam (LGEDV)"
+            src={item.logo}
+            alt={item.companyName}
             className="w-[100%] h-[100%] object-contain"
           />
         </div>
         <h3 className="sm:my-[24px] my-[16px] sm:mx-[16px] mx-[8px] font-[700] sm:text-[18px] text-[14px] text-[#121212] text-center flex-1 whitespace-normal line-clamp-2">
-          LG Electronics Development Vietnam (LGEDV)
+          {item.companyName}
         </h3>
         <div className="bg-[#F7F7F7] flex items-center sm:justify-between justify-center gap-[12px] py-[12px] px-[16px]">
           <div className="font-[400] sm:text-[14px] text-[12px] text-[#414042]">
-            Ho Chi Minh
+            {item.cityName}
           </div>
           <div className="inline-flex items-center gap-x-[6px] font-[400] sm:text-[14px] text-[12px] text-[#121212]">
-            <FaUserTie className="text-[16px] text-[#000096]" /> 5 Việc làm
+            <FaUserTie className="text-[16px] text-[#000096]" /> {item.totalJob} việc làm
           </div>
         </div>
       </Link>
