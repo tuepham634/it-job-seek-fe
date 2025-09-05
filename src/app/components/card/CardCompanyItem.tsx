@@ -3,14 +3,14 @@ import Link from "next/link"
 import { FaUserTie } from "react-icons/fa6"
 
 export const CardCompanyItem = (props: {
-  item :any
+  item? :any
 }) => {
   const { item } = props;
 
   return (
     <>
       <Link 
-        href="" 
+        href={`/company/detail/${item.id}`} 
         className="border border-[#DEDEDE] rounded-[8px] flex flex-col relative truncate"
         style={{
           background: "linear-gradient(180deg, #F6F6F6 2.38%, #FFFFFF 70.43%)"

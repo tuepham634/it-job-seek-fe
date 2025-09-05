@@ -15,22 +15,27 @@ export const SearchContainer = () => {
     const position = searchParams.get("position") || "";
     const workingForm = searchParams.get("workingForm") || "";
     const [jobList, setJobList] = useState<any[]>([]);
-    
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState();
+    const [totalRecord, setTotalRecord] = useState();
+
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}`)
-        .then(res => res.json())
-        .then(data => {
-            setJobList(data.jobs);
-        })
-    }, [language, city, company, keyword, position, workingForm]);
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}&page=${page}`)
+            .then(res => res.json())
+            .then(data => {
+                setJobList(data.jobs);
+                setTotalPage(data.totalPage);
+                setTotalRecord(data.totalRecord);
+            })
+    }, [language, city, company, keyword, position, workingForm, page]);
     const handleFilterPosition = (event: any) => {
         const value = event.target.value;
 
         const params = new URLSearchParams(searchParams.toString());
-        if(value) {
-        params.set("position", value);
+        if (value) {
+            params.set("position", value);
         } else {
-        params.delete("position");
+            params.delete("position");
         }
 
         router.push(`?${params.toString()}`);
@@ -40,7 +45,7 @@ export const SearchContainer = () => {
         const value = event.target.value;
 
         const params = new URLSearchParams(searchParams.toString());
-        if(value) {
+        if (value) {
             params.set("workingForm", value);
         } else {
             params.delete("workingForm");
@@ -48,17 +53,24 @@ export const SearchContainer = () => {
 
         router.push(`?${params.toString()}`);
     }
+    const handlePagination = (event: any) => {
+        const value = event.target.value;
+        setPage(parseInt(value));
+    }
+
 
     return (
         <>
             <div className="container mx-auto px-[16px]">
 
-                <h2 className="font-[700] text-[28px] text-[#121212] mb-[30px]">
-                    {jobList.length} việc làm 
-                    <span className="text-[#0088FF]">
-                        {language} {city} {company} {keyword} {position} {workingForm}
-                    </span>
-                </h2>
+                {totalRecord && (
+                    <h2 className="font-[700] text-[28px] text-[#121212] mb-[30px]">
+                        {totalRecord} việc làm
+                        <span className="text-[#0088FF]">
+                            {language} {city} {company} {keyword}
+                        </span>
+                    </h2>
+                )}
 
                 <div
                     className="bg-white rounded-[8px] py-[10px] px-[20px] mb-[30px] flex flex-wrap gap-[12px]"
@@ -66,18 +78,18 @@ export const SearchContainer = () => {
                         boxShadow: "0px 4px 20px 0px #0000000F"
                     }}
                 >
-                    <select 
-                        name="" 
+                    <select
+                        name=""
                         className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]"
                         onChange={handleFilterPosition}
                         defaultValue={position}
                     >
-                       {positionList.map((item, index) => (
-                        <option key={index} value={item.value}>{item.label}</option>
-                       ))}
+                        {positionList.map((item, index) => (
+                            <option key={index} value={item.value}>{item.label}</option>
+                        ))}
                     </select>
-                    <select 
-                        name="" 
+                    <select
+                        name=""
                         className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]"
                         onChange={handleFilterWorkingForm}
                         defaultValue={workingForm}
@@ -96,11 +108,16 @@ export const SearchContainer = () => {
                 </div>
 
                 <div className="mt-[30px]">
-                    <select name="" className="border border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042] outline-none">
-                        <option value="">Trang 1</option>
-                        <option value="">Trang 2</option>
-                        <option value="">Trang 3</option>
+                    <select
+                        name=""
+                        className="border border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042]"
+                        onChange={handlePagination}
+                    >
+                        {Array(totalPage).fill("").map((item, index) => (
+                            <option key={index} value={index + 1}>Trang {index + 1}</option>
+                        ))}
                     </select>
+
                 </div>
 
             </div>

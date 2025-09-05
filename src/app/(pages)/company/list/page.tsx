@@ -18,7 +18,7 @@ export default function CompanyListPage() {
           {/* Wrap */}
           <div className="grid lg:grid-cols-3 grid-cols-2 sm:gap-[20px] gap-x-[10px] gap-y-[20px]">
             {/* Item */}
-            <CardCompanyItem />
+            <CardCompanyItem  />
           </div>
 
           <div className="mt-[30px]">

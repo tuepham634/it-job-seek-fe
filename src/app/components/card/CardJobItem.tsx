@@ -4,11 +4,11 @@ import Link from "next/link"
 import { FaBriefcase, FaLocationDot, FaUserTie } from "react-icons/fa6"
 
 export const CardJobItem = (props : {
-  item : any
+  item? : any
 }) => {
   const {item} = props;
-  const position = positionList.find(pos => pos.value === item.position)?.label;
-  const workingForm = workingFormList.find(work => work.value === item.workingForm)?.label;
+  const position = positionList.find(pos => pos.value === item?.position)?.label;
+  const workingForm = workingFormList.find(work => work.value === item?.workingForm)?.label;
 
   return (
     <>
@@ -31,19 +31,19 @@ export const CardJobItem = (props : {
           }}
         >
           <img 
-            src={item.companyLogo}
-            alt={item.companyName}
+            src={item?.companyLogo}
+            alt={item?.companyName}
             className="w-[100%] h-[100%] object-contain"
           />
         </div>
         <h3 className="mt-[20px] mx-[16px] font-[700] text-[18px] text-[#121212] text-center flex-1 whitespace-normal line-clamp-2">
-          {item.title}
+          {item?.title}
         </h3>
         <div className="mt-[6px] text-center font-[400] text-[14px] text-[#121212]">
-          {item.companyName}
+          {item?.companyName}
         </div>
         <div className="mt-[12px] text-center font-[600] text-[16px] text-[#0088FF]">
-           {item.salaryMin.toLocaleString("vi-VN")}$ - {item.salaryMax.toLocaleString("vi-VN")}$
+           {item?.salaryMin.toLocaleString("vi-VN")}$ - {item?.salaryMax.toLocaleString("vi-VN")}$
         </div>
         <div className="mt-[6px] flex justify-center items-center gap-[8px] font-[400] text-[14px] text-[#121212]">
           <FaUserTie className="text-[16px]" />{position}
@@ -52,10 +52,10 @@ export const CardJobItem = (props : {
           <FaBriefcase className="text-[16px]" /> {workingForm}
         </div>
         <div className="mt-[6px] flex justify-center items-center gap-[8px] font-[400] text-[14px] text-[#121212]">
-          <FaLocationDot className="text-[16px]" /> {item.companyCity}
+          <FaLocationDot className="text-[16px]" /> {item?.companyCity}
         </div>
         <div className="mt-[12px] mb-[20px] mx-[16px] flex flex-wrap justify-center gap-[8px]">
-          {item.technologies.map((tech: string, index: number) => (
+          {item?.technologies.map((tech: string, index: number) => (
             <div key={index} className="border border-[#DEDEDE] rounded-[20px] py-[6px] px-[16px] font-[400] text-[12px] text-[#414042]">
               {tech}
             </div>
