@@ -1,26 +1,63 @@
 "use client";
 import { CardJobItem } from "@/app/components/card/CardJobItem";
+import { positionList, workingFormList } from "@/config/variable";
+import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 export const SearchContainer = () => {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const language = searchParams.get("language") || "";
+    const city = searchParams.get("city") || "";
+    const company = searchParams.get("company") || "";
+    const keyword = searchParams.get("keyword") || "";
+    const position = searchParams.get("position") || "";
+    const workingForm = searchParams.get("workingForm") || "";
     const [jobList, setJobList] = useState<any[]>([]);
     
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}`)
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}`)
         .then(res => res.json())
         .then(data => {
             setJobList(data.jobs);
         })
-    }, [language]);
+    }, [language, city, company, keyword, position, workingForm]);
+    const handleFilterPosition = (event: any) => {
+        const value = event.target.value;
+
+        const params = new URLSearchParams(searchParams.toString());
+        if(value) {
+        params.set("position", value);
+        } else {
+        params.delete("position");
+        }
+
+        router.push(`?${params.toString()}`);
+    }
+
+    const handleFilterWorkingForm = (event: any) => {
+        const value = event.target.value;
+
+        const params = new URLSearchParams(searchParams.toString());
+        if(value) {
+            params.set("workingForm", value);
+        } else {
+            params.delete("workingForm");
+        }
+
+        router.push(`?${params.toString()}`);
+    }
+
     return (
         <>
             <div className="container mx-auto px-[16px]">
 
                 <h2 className="font-[700] text-[28px] text-[#121212] mb-[30px]">
-                    {jobList.length} việc làm <span className="text-[#0088FF]">{language}</span>
+                    {jobList.length} việc làm 
+                    <span className="text-[#0088FF]">
+                        {language} {city} {company} {keyword} {position} {workingForm}
+                    </span>
                 </h2>
 
                 <div
@@ -29,20 +66,25 @@ export const SearchContainer = () => {
                         boxShadow: "0px 4px 20px 0px #0000000F"
                     }}
                 >
-                    <select name="" className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]">
-                        <option value="">Cấp bậc</option>
-                        <option value="">Intern</option>
-                        <option value="">Fresher</option>
-                        <option value="">Junior</option>
-                        <option value="">Middle</option>
-                        <option value="">Senior</option>
-                        <option value="">Manager</option>
+                    <select 
+                        name="" 
+                        className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]"
+                        onChange={handleFilterPosition}
+                        defaultValue={position}
+                    >
+                       {positionList.map((item, index) => (
+                        <option key={index} value={item.value}>{item.label}</option>
+                       ))}
                     </select>
-                    <select name="" className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]">
-                        <option value="">Hình thức làm việc</option>
-                        <option value="">Tại văn phòng</option>
-                        <option value="">Làm từ xa</option>
-                        <option value="">Linh hoạt</option>
+                    <select 
+                        name="" 
+                        className="border border-[#DEDEDE] rounded-[20px] h-[36px] px-[18px] font-[400] text-[16px] text-[#414042]"
+                        onChange={handleFilterWorkingForm}
+                        defaultValue={workingForm}
+                    >
+                        {workingFormList.map((item, index) => (
+                            <option key={index} value={item.value}>{item.label}</option>
+                        ))}
                     </select>
                 </div>
 

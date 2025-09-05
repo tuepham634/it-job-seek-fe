@@ -1,5 +1,4 @@
 import { Metadata } from "next"
-import { CardJobItem } from "@/app/components/card/CardJobItem"
 import { SearchContainer } from "./SearchContainer"
 
 export const metadata: Metadata = {
