@@ -78,11 +78,15 @@ export default async function JobDetailPage({
                         />
                       ))
                     }
-                    <img
-                      src="/assets/images/demo-banner-1.jpg"
-                      alt=""
-                      className="aspect-[232/145] object-cover rounded-[4px]"
-                    />
+                    {/*
+                      <img
+                        src="/assets/images/demo-banner-1.jpg"
+                        alt=""
+                        className="aspect-[232/145] object-cover rounded-[4px]"
+                      />
+                      */
+                    }
+  
                   </div>
                   <div className="flex items-center gap-[8px] font-[400] text-[14px] text-[#121212] mb-[10px]">
                     <FaUserTie className="text-[16px]" /> {jobDetail.position}
