@@ -26,19 +26,19 @@ export const HeaderAccount = () => {
             {/* Đã đăng nhập user */}
             {infoUser && (
               <>
-                <Link href="user-manage/profile" className="">{infoUser.fullName}</Link>
-                <ul className="absolute top-[100%] right-[0px] w-[200px] bg-[#000065] hidden group-hover/sub-1:block z-[999]">
-                  <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2">
-                    <Link href="user-manage/profile" className="text-white font-[600] text-[16px]">
+                <Link href="/user-manage/profile" className="">{infoUser.fullName}</Link>
+                <ul className="absolute top-[100%] right-[0px] w-[200px] bg-[linear-gradient(90deg,#232526_0%,#414345_100%)] hidden group-hover/sub-1:block z-[999]">
+                  <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[rgba(255,255,255,0.1)] relative group/sub-2">
+                    <Link href="/user-manage/profile" className="text-white font-[600] text-[16px]">
                       Thông tin cá nhân
                     </Link>
                   </li>
-                  <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2">
-                    <Link href="user-manage/cv/list" className="text-white font-[600] text-[16px]">
+                  <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[rgba(255,255,255,0.1)] relative group/sub-2">
+                    <Link href="/user-manage/cv/list" className="text-white font-[600] text-[16px]">
                       Quản lý CV đã gửi
                     </Link>
                   </li>
-                  <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2 cursor-pointer" onClick={() => handleLogout("/user/login")}>
+                  <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[rgba(255,255,255,0.1)] relative group/sub-2 cursor-pointer" onClick={() => handleLogout("/user/login")}>
                     Đăng xuất
                   </li>
                 </ul>
@@ -49,24 +49,24 @@ export const HeaderAccount = () => {
             
             {infoCompany && (
               <>
-              <Link href="company-manage/profile" className="">{infoCompany.companyName}</Link> 
-              <ul className="absolute top-[100%] right-[0px] w-[200px] bg-[#000065] hidden group-hover/sub-1:block z-[999]">
-              <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2">
-                <Link href="company-manage/profile" className="text-white font-[600] text-[16px]">
+              <Link href="/company-manage/profile" className="">{infoCompany.companyName}</Link> 
+              <ul className="absolute top-[100%] right-[0px] w-[200px] bg-[linear-gradient(90deg,#232526_0%,#414345_100%)] hidden group-hover/sub-1:block z-[999]">
+              <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[rgba(255,255,255,0.1)] relative group/sub-2">
+                <Link href="/company-manage/profile" className="text-white font-[600] text-[16px]">
                   Thông tin công ty
                 </Link>
               </li>
-              <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2">
-                <Link href="company-manage/job/list" className="text-white font-[600] text-[16px]">
+              <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[rgba(255,255,255,0.1)] relative group/sub-2">
+                <Link href="/company-manage/job/list" className="text-white font-[600] text-[16px]">
                   Quản lý công việc
                 </Link>
               </li>
-              <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2">
-                <Link href="company-manage/cv/list" className="text-white font-[600] text-[16px]">
+              <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[rgba(255,255,255,0.1)] relative group/sub-2">
+                <Link href="/company-manage/cv/list" className="text-white font-[600] text-[16px]">
                   Quản lý CV
                 </Link>
               </li>
-              <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[#000096] relative group/sub-2 cursor-pointer" onClick={() => handleLogout("/company/login")}>
+              <li className="py-[10px] px-[16px] rounded-[4px] flex items-center justify-between hover:bg-[rgba(255,255,255,0.1)] relative group/sub-2 cursor-pointer" onClick={() => handleLogout("/company/login")}>
                   Đăng xuất
               </li>
             </ul> 

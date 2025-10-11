@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import { positionList, workingFormList } from "@/config/variable";
 import { Metadata } from "next";
@@ -58,12 +59,12 @@ export default async function JobDetailPage({
                   <div className="font-[400] text-[16px] text-[#414042] mb-[10px]">
                     {jobDetail.companyName}
                   </div>
-                  <div className="font-[700] text-[20px] text-[#0088FF] sm:mb-[20px] mb-[10px]">
+                  <div className="font-[700] text-[20px] text-[#0088FFlinear-gradient(135deg,#134e5e_0%,#71b280_50%,#00ff7f_100%)] sm:mb-[20px] mb-[10px]">
                     {jobDetail.salaryMin}$ - {jobDetail.salaryMax}$
                   </div>
                   <Link
                     href="#apply-form"
-                    className="bg-[#0088FF] rounded-[4px] font-[700] text-[16px] text-white flex items-center justify-center h-[48px] mb-[20px]"
+                    className="bg-[linear-gradient(90deg,#00c6ff_0%,#0072ff_100%)] rounded-[4px] font-[700] text-[16px] text-white flex items-center justify-center h-[48px] mb-[20px]"
                   >
                     Ứng tuyển
                   </Link>
@@ -74,7 +75,7 @@ export default async function JobDetailPage({
                           key={index}
                           src={image}
                           alt="" 
-                          className="aspect-[232/145] object-cover rounded-[4px] w-full"
+                          className="aspect-[232/145] object-contain rounded-[4px] w-full"
                         />
                       ))
                     }
@@ -129,7 +130,7 @@ export default async function JobDetailPage({
                       <img
                         src={jobDetail.companyLogo} 
                         alt={jobDetail.companyName} 
-                        className="aspect-square object-cover rounded-[4px]"
+                        className="aspect-square object-contain rounded-[4px]"
                       />
                     </div>
                     <div className="flex-1">
@@ -137,8 +138,8 @@ export default async function JobDetailPage({
                         {jobDetail.companyName}
                       </div>
                       <Link
-                        href={`/company/detail/${jobDetail.id}`}
-                        className="flex items-center gap-[8px] font-[400] text-[16px] text-[#0088FF]"
+                        href={`/company/detail/${jobDetail.companyId}`}
+                        className="flex items-center gap-[8px] font-[400] text-[16px] text-[#121212]"
                       >
                         Xem công ty <FaArrowRightLong className="" />
                       </Link>

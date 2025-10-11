@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Toaster, toast } from 'sonner'
 export const ButtonDelete = (props: {
     api: string,
@@ -29,7 +30,7 @@ export const ButtonDelete = (props: {
     return (
         <>
             <Toaster position="top-right" richColors />
-            <button className="bg-[#FF0000] rounded-[4px] font-[400] text-[14px] text-white inline-block py-[8px] px-[20px]" onClick={handleDelete}>
+            <button className="bg-[#d42c2c] rounded-[4px] font-[400] text-[14px] text-white inline-block py-[8px] px-[20px]" onClick={handleDelete}>
                 Xóa
             </button>
         </>

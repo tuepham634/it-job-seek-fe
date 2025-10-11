@@ -1,7 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
+
 import { Metadata } from "next"
-import Link from "next/link"
-import { FaBriefcase, FaCircleCheck, FaEnvelope, FaEye, FaPhone, FaUserTie } from "react-icons/fa6"
 import { CVList } from "./CVList"
 
 export const metadata: Metadata = {

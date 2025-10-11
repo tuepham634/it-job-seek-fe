@@ -10,7 +10,7 @@ export const CompanyList = () => {
 
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=3&page=${page}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6&page=${page}`)
       .then(res => res.json())
       .then(data => {
         if (data.code == "success") {

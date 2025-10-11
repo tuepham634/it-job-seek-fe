@@ -60,7 +60,7 @@ export const CVItem = (props: {
         <div className="mt-[6px] flex justify-center items-center gap-[8px] font-[400] text-[14px] text-[#121212]">
           <FaPhone className="" /> {item.phone}
         </div>
-        <div className="mt-[12px] text-center font-[600] text-[16px] text-[#0088FF]">
+        <div className="mt-[12px] text-center font-[600] text-[16px] text-[#121212]">
           {item.jobSalaryMin.toLocaleString("vi-VN")}$ - {item.jobSalaryMax.toLocaleString("vi-VN")}$
         </div>
         <div className="mt-[6px] flex justify-center items-center gap-[8px] font-[400] text-[14px] text-[#121212]">

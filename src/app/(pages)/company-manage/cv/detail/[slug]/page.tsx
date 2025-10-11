@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { positionList, workingFormList } from "@/config/variable"
 import { Metadata } from "next"

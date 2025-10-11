@@ -297,7 +297,7 @@ export const FormProfile = () => {
             />
             </div>
             <div className="sm:col-span-2">
-            <button className="bg-[#0088FF] rounded-[4px] h-[48px] px-[20px] font-[700] text-[16px] text-white">
+            <button className="bg-[linear-gradient(90deg,#00c6ff_0%,#0072ff_100%)] rounded-[4px] h-[48px] px-[20px] font-[700] text-[16px] text-white">
                 Cập nhật
             </button>
             </div>

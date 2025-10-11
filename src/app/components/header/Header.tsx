@@ -15,13 +15,13 @@ export const Header = () => {
 
   return (
     <>
-      <header className="bg-[#000071] py-[15px] px-[16px]">
+      <header className="bg-[linear-gradient(90deg,#232526_0%,#414345_100%)] py-[15px] px-[16px]">
         <div className="container mx-auto">
           {/* Wrap */}
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="text-white font-[800] sm:text-[28px] text-[20px] lg:flex-none flex-1">
-              28.ITJobs
+              ITSeek
             </Link>
             {/* Menu */}
             <HeaderMenu showMenu={showMenu} />

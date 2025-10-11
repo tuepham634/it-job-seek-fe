@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import JustValidate from "just-validate";
 import { useEffect } from "react";
@@ -175,7 +177,7 @@ export const FormApply = ( props : {
                             className=""
                         />
                     </div>
-                    <button className="w-[100%] h-[48px] rounded-[4px] bg-[#0088FF] font-[700] text-[16px] text-white">
+                    <button className="w-[100%] h-[48px] rounded-[4px] bg-[linear-gradient(90deg,#00c6ff_0%,#0072ff_100%)] font-[700] text-[16px] text-white">
                         Gửi CV ứng tuyển
                     </button>
                 </form>

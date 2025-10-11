@@ -1,5 +1,4 @@
 import { Metadata } from "next"
-import { CardCompanyItem } from "@/app/components/card/CardCompanyItem"
 import { CompanyList } from "./CompanyList"
 
 export const metadata: Metadata = {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link"
 import { FaUserTie } from "react-icons/fa6"
@@ -41,7 +42,7 @@ export const CardCompanyItem = (props: {
             {item.cityName}
           </div>
           <div className="inline-flex items-center gap-x-[6px] font-[400] sm:text-[14px] text-[12px] text-[#121212]">
-            <FaUserTie className="text-[16px] text-[#000096]" /> {item.totalJob} việc làm
+            <FaUserTie className="text-[16px] text-[#121212]" /> {item.totalJob} việc làm
           </div>
         </div>
       </Link>
