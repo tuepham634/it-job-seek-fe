@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-
+export const dynamic = "force-dynamic";
 export default function AllPage() {
   const searchParams = useSearchParams();
   const type = searchParams.get("type"); // skill | city | company
