@@ -6,13 +6,14 @@ export const metadata: Metadata = {
   title: "Chỉnh sửa công việc",
   description: "Mô tả trang chỉnh sửa công việc...",
 }
-
-export default function CompanyManageJobEditPage({ params }: {
+//  Tự định nghĩa props kiểu thủ công
+interface Props {
   params: {
-    id: string
-  }
-}) {
-  const { id } = params;
+    id: string;
+  };
+}
+export default function CompanyManageJobEditPage({ params }: Props) {
+   const { id } = params;
 
   return (
     <>
