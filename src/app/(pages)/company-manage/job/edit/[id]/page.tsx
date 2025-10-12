@@ -7,12 +7,12 @@ export const metadata: Metadata = {
   description: "Mô tả trang chỉnh sửa công việc...",
 }
 
-export default async function CompanyManageJobEditPage({ params }: {
+export default function CompanyManageJobEditPage({ params }: {
   params: {
     id: string
   }
 }) {
-  const { id } = await params;
+  const { id } = params;
 
   return (
     <>
