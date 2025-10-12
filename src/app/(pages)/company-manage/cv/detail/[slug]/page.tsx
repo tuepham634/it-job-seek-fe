@@ -10,11 +10,9 @@ export const metadata: Metadata = {
   description: "Mô tả trang chi tiết CV...",
 }
 
-export default async function CompanyManageCVDetailPage({ params }: {
-   params: Promise<{ slug: string }>
-})
+export default async function CompanyManageCVDetailPage({ params }: any)
  {
-  const { slug } = await params;
+  const { slug } =  params;
 
   const headerList = await headers();
   const cookie = headerList.get("cookie");
