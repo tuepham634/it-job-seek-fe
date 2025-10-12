@@ -11,12 +11,10 @@ export const metadata: Metadata = {
 }
 
 export default async function CompanyManageCVDetailPage({ params }: {
-  params: {
-    slug: string
-  }
+   params: Promise<{ slug: string }>
 })
  {
-  const { slug } =  params;
+  const { slug } = await params;
 
   const headerList = await headers();
   const cookie = headerList.get("cookie");
