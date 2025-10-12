@@ -16,7 +16,7 @@ export default async function CompanyManageCVDetailPage({ params }: {
   }
 })
  {
-  const { slug } = await params;
+  const { slug } =  params;
 
   const headerList = await headers();
   const cookie = headerList.get("cookie");
