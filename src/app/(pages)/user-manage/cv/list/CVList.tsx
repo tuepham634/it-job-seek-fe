@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 "use client";
+
 import { cvStatusList, positionList, workingFormList } from "@/config/variable";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaBriefcase, FaCircleCheck, FaUserTie } from "react-icons/fa6";
 import { CVDetailModal } from "./CVDetailModal";
 import { ButtonDelete } from "@/app/components/button/ButtonDelete";
+import { motion } from "framer-motion";
+import { FileText, PlusCircle } from "lucide-react";
 
 export const CVList = () => {
   const [listCV, setListCV] = useState<any[]>([]);
@@ -17,13 +20,13 @@ export const CVList = () => {
   const [totalPage, setTotalPage] = useState<number>();
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/cv/list?page=${page}`, {
       method: "GET",
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("📦 Dữ liệu trả về từ API /user/cv/list:", data);
         if (data.code === "success") {
           setListCV(data.listCV);
           setTotalPage(data.totalPage);
@@ -31,12 +34,13 @@ export const CVList = () => {
       })
       .finally(() => setLoading(false));
   }, [page]);
-    const handlePagination = (event: any) => {
+
+  const handlePagination = (event: any) => {
     const value = event.target.value;
     setPage(parseInt(value));
   };
 
-  // Skeleton card
+  // Skeleton loading
   const CVSkeleton = () => (
     <div className="border border-[#DEDEDE] rounded-[8px] p-[16px] bg-gradient-to-b from-gray-100 to-white animate-pulse">
       <div className="w-[80%] h-[20px] bg-gray-300 rounded mx-auto mb-[10px]" />
@@ -54,18 +58,36 @@ export const CVList = () => {
   return (
     <>
       <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
-        {/* Hiển thị 3 skeleton khi đang load */}
+        {/* Skeleton loading */}
         {loading &&
           Array.from({ length: 3 }).map((_, idx) => <CVSkeleton key={idx} />)}
 
-        {/* Nếu load xong mà không có dữ liệu */}
+        {/* Khi không có CV nào */}
         {!loading && listCV.length === 0 && (
-          <div className="col-span-full text-center text-gray-500 text-[16px]">
-            Không có dữ liệu
-          </div>
+          <motion.div
+            className="col-span-full flex flex-col items-center justify-center py-[100px] text-center bg-white rounded-[12px] shadow-sm"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <FileText size={80} className="text-gray-400 mb-4" />
+            <h3 className="text-[22px] font-semibold text-[#333] mb-2">
+              Bạn chưa có CV nào
+            </h3>
+            <p className="text-[#777] text-[16px] mb-6 max-w-[400px]">
+              Tạo ngay CV đầu tiên để gây ấn tượng với nhà tuyển dụng và mở ra nhiều cơ hội việc làm hơn.
+            </p>
+            <Link
+              href="/company/list"
+              className="inline-flex items-center gap-2 bg-[#2563EB] text-white px-5 py-3 rounded-[10px] hover:bg-[#1E40AF] transition-colors"
+            >
+              <PlusCircle size={20} />
+              Tạo CV mới
+            </Link>
+          </motion.div>
         )}
 
-        {/* Dữ liệu thật */}
+        {/* Hiển thị danh sách CV */}
         {!loading &&
           listCV.map((item) => {
             const jobPositionLabel = positionList.find(
@@ -100,7 +122,8 @@ export const CVList = () => {
                 </h3>
 
                 <div className="mt-[12px] text-center font-[400] text-[14px] text-black">
-                  Công ty: <span className="font-[700]">{item.companyName}</span>
+                  Công ty:{" "}
+                  <span className="font-[700]">{item.companyName}</span>
                 </div>
 
                 <div className="mt-[6px] text-center font-[600] text-[16px] text-[#121212]">
@@ -138,10 +161,9 @@ export const CVList = () => {
                     Xem
                   </Link>
                   <ButtonDelete
-                    api={`${process.env.NEXT_PUBLIC_API_URL}/user/cv/delete/${item.id}`} // API xóa CV
+                    api={`${process.env.NEXT_PUBLIC_API_URL}/user/cv/delete/${item.id}`}
                     item={item}
                     onDeleteSuccess={(id) => {
-                      // Cập nhật danh sách CV sau khi xóa
                       setListCV((prev) => prev.filter((cv) => cv.id !== id));
                     }}
                   />
@@ -151,12 +173,13 @@ export const CVList = () => {
           })}
       </div>
 
-      <div className="mt-[30px]">
       {/* Phân trang */}
+      <div className="mt-[30px]">
         {!loading && totalPage && (
           <div className="mt-[30px] flex justify-start">
             <select
               className="border border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042]"
+              value={page}
               onChange={handlePagination}
             >
               {Array(totalPage)
