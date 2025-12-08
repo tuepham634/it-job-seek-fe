@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { CardCompanyItem } from "@/app/components/card/CardCompanyItem";
@@ -27,7 +26,7 @@ export const Section2 = () => {
             ? Array(6)
                 .fill(0)
                 .map((_, i) => <CardCompanySkeleton key={i} />)
-            : companyList.map((item) => (
+            : companyList.map((item: any) => (
                 <CardCompanyItem key={item.id} item={item} />
               ))}
         </div>

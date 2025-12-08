@@ -8,7 +8,7 @@ import { fetcher } from "@/utils/fetcher";
 export const CompanyList = () => {
   const [page, setPage] = useState(1);
   
-  const { data, error, isLoading } = useSWR(
+  const { data, isLoading } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6&page=${page}`,
     fetcher,
     {
