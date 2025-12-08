@@ -89,7 +89,7 @@ export const JobList = () => {
             .fill(0)
             .map((_, i) => <CardJobSkeleton key={i} />)
         ) : jobList.length > 0 ? (
-          jobList.map((item) => <CardJobItem key={item.id} item={item} />)
+          jobList.map((item: any) => <CardJobItem key={item.id} item={item} />)
         ) : (
           <motion.div
             className="col-span-full flex flex-col items-center justify-center py-[100px] text-center bg-white rounded-[12px] shadow-sm"
