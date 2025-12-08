@@ -1,30 +1,42 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { CardCompanyItem } from "@/app/components/card/CardCompanyItem";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
 
 export const CompanyList = () => {
-  const [companyList, setCompanyList] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState<number>(0);
-  const [loading, setLoading] = useState(true);
+  
+  const { data, error, isLoading } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6&page=${page}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000 // Cache for 1 minute
+    }
+  );
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6&page=${page}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.code === "success") {
-          setCompanyList(data.companyList);
-          setTotalPage(data.totalPage);
-        } else {
-          setCompanyList([]);
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [page]);
+  const loading = isLoading;
+  const companyList = data?.code === "success" ? data.companyList : [];
+  const totalPage = data?.code === "success" ? data.totalPage : 0;
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6&page=${page}`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.code === "success") {
+  //         setCompanyList(data.companyList);
+  //         setTotalPage(data.totalPage);
+  //       } else {
+  //         setCompanyList([]);
+  //       }
+  //     })
+  //     .finally(() => setLoading(false));
+  // }, [page]);
 
   const handlePagination = (event: any) => {
     setPage(parseInt(event.target.value));

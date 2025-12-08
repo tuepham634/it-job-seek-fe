@@ -4,36 +4,28 @@
 
 import { cvStatusList, positionList, workingFormList } from "@/config/variable";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaBriefcase, FaCircleCheck, FaUserTie } from "react-icons/fa6";
 import { CVDetailModal } from "./CVDetailModal";
 import { ButtonDelete } from "@/app/components/button/ButtonDelete";
 import { motion } from "framer-motion";
 import { FileText, PlusCircle } from "lucide-react";
+import useSWR from "swr";
+import { fetcherWithCredentials } from "@/utils/fetcher";
 
 export const CVList = () => {
-  const [listCV, setListCV] = useState<any[]>([]);
   const [selectedCV, setSelectedCV] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState<number>();
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/cv/list?page=${page}`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.code === "success") {
-          setListCV(data.listCV);
-          setTotalPage(data.totalPage);
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [page]);
+  const { data, isLoading, mutate } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/user/cv/list?page=${page}`,
+    fetcherWithCredentials
+  );
+
+  const loading = isLoading;
+  const listCV = data?.code === "success" ? data.listCV : [];
+  const totalPage = data?.code === "success" ? data.totalPage : 0;
 
   const handlePagination = (event: any) => {
     const value = event.target.value;
@@ -163,8 +155,8 @@ export const CVList = () => {
                   <ButtonDelete
                     api={`${process.env.NEXT_PUBLIC_API_URL}/user/cv/delete/${item.id}`}
                     item={item}
-                    onDeleteSuccess={(id) => {
-                      setListCV((prev) => prev.filter((cv) => cv.id !== id));
+                    onDeleteSuccess={() => {
+                      mutate(); // Revalidate SWR
                     }}
                   />
                 </div>

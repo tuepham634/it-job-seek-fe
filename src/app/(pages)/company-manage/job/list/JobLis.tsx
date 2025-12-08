@@ -6,38 +6,25 @@ import { CardJobSkeleton } from "@/app/components/card/CardJobSkeleton";
 import { positionList, workingFormList } from "@/config/variable";
 import { motion } from "framer-motion";
 import { Briefcase, PlusCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
 
 export const JobList = () => {
-  const [jobList, setJobList] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState<number>();
-  const [totalRecord, setTotalRecord] = useState<number>();
-  const [loading, setLoading] = useState(true);
   const [position, setPosition] = useState("");
   const [workingForm, setWorkingForm] = useState("");
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/company/job/list?page=${page}&position=${position}&workingForm=${workingForm}`,
-      {
-        method: "GET",
-        credentials: "include",
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.code === "success") {
-          setJobList(data.jobs);
-          setTotalPage(data.totalPage);
-          setTotalRecord(data.totalRecord);
-        }
-      })
-      .catch((err) => console.error("Fetch jobs error:", err))
-      .finally(() => setLoading(false));
-  }, [page, position, workingForm]);
+  const { data, isLoading } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/company/job/list?page=${page}&position=${position}&workingForm=${workingForm}`,
+    fetcher
+  );
+
+  const loading = isLoading;
+  const jobList = data?.code === "success" ? data.jobs : [];
+  const totalPage = data?.code === "success" ? data.totalPage : 0;
+  const totalRecord = data?.code === "success" ? data.totalRecord : 0;
 
   const handlePagination = (event: any) => {
     const value = event.target.value;

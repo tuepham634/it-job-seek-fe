@@ -2,12 +2,20 @@
 "use client"
 import Link from "next/link"
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
 import { FaMagnifyingGlass } from "react-icons/fa6"
 
 export const Section1 = () => {
-    const [cityList, setCityList] = useState<any[]>([]);
     const router = useRouter();
+    
+    const { data } = useSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/city/list`,
+        fetcher
+    );
+    
+    const cityList = data?.code === "success" ? data.cityList : [];
+    
     const handleSearch = (event: any) => {
         event.preventDefault();
         const city = event.target.city.value;
@@ -16,16 +24,6 @@ export const Section1 = () => {
         router.push(`/search?city=${city}&keyword=${keyword}`);
 
     }
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/city/list`)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.code === "success") {
-                    setCityList(data.cityList)
-                }
-            })
-            .catch((err) => console.error("Lỗi khi tải danh sách thành phố:", err))
-    }, [])
 
 
     return (

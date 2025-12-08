@@ -8,6 +8,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiSearch } from "react-icons/fi";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
 
 export const SearchContainer = () => {
   const router = useRouter();
@@ -19,28 +21,21 @@ export const SearchContainer = () => {
   const position = searchParams.get("position") || "";
   const workingForm = searchParams.get("workingForm") || "";
 
-  const [jobList, setJobList] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState<number>();
-  const [totalRecord, setTotalRecord] = useState<number>();
-  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     setPage(1);
   }, [language, city, company, keyword, position, workingForm]);
-  useEffect(() => {
-    setLoading(true);
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}&page=${page}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setJobList(data.jobs);
-        setTotalPage(data.totalPage);
-        setTotalRecord(data.totalRecord);
-      })
-      .catch((err) => console.error("Fetch jobs error:", err))
-      .finally(() => setLoading(false));
-  }, [language, city, company, keyword, position, workingForm, page]);
+
+  const { data, isLoading } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}&page=${page}`,
+    fetcher
+  );
+
+  const loading = isLoading;
+  const jobList = data?.jobs || [];
+  const totalPage = data?.totalPage;
+  const totalRecord = data?.totalRecord;
 
   const handleFilterPosition = (event: any) => {
     const value = event.target.value;

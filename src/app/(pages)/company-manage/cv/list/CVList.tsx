@@ -4,41 +4,31 @@
 import { positionList, workingFormList } from "@/config/variable";
 import { FiFileText } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CVItem } from "./CVItem";
+import useSWR from "swr";
+import { fetcherWithCredentials } from "@/utils/fetcher";
 
 export const CVList = () => {
-  const [listCV, setListCV] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState<number>();
-  const [totalRecord, setTotalRecord] = useState<number>();
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/cv/list?page=${page}`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.code === "success") {
-          setListCV(data.listCV);
-          setTotalPage(data.totalPage);
-          setTotalRecord(data.totalRecord);
-        }
-      })
-      .catch((err) => console.error("Fetch CV list error:", err))
-      .finally(() => setLoading(false));
-  }, [page]);
+  const { data, isLoading, mutate } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/company/cv/list?page=${page}`,
+    fetcherWithCredentials
+  );
+
+  const loading = isLoading;
+  const listCV = data?.code === "success" ? data.listCV : [];
+  const totalPage = data?.code === "success" ? data.totalPage : 0;
+  const totalRecord = data?.code === "success" ? data.totalRecord : 0;
 
   const handlePagination = (event: any) => {
     const value = event.target.value;
     setPage(parseInt(value));
   };
 
-  const handleDeleteSuccess = (id: string) => {
-    setListCV((prev) => prev.filter((cv) => cv.id !== id));
+  const handleDeleteSuccess = () => {
+    mutate(); // Revalidate SWR
   };
 
   return (

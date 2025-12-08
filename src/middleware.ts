@@ -2,16 +2,38 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Prevent infinite redirect loop - if already on home/login page, allow access
+  if (pathname === "/" || pathname.startsWith("/user/login") || pathname.startsWith("/company/login")) {
+    return NextResponse.next();
+  }
+
   try {
     // Lấy cookie header trình duyệt gửi đến FE
     const cookieHeader = request.headers.get("cookie") || "";
-    console.log("Cookie Header:", cookieHeader);
+    
+    // Only log in development
+    if (process.env.NODE_ENV === "development") {
+      console.log("Cookie Header:", cookieHeader);
+    }
 
-    // Gọi BE để check token
+    // Gọi BE để check token với timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/check`, {
       headers: { cookie: cookieHeader },
       credentials: "include",
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      // HTTP error → redirect to home
+      return NextResponse.redirect(new URL("/", request.url));
+    }
 
     const data = await res.json();
 
@@ -22,15 +44,22 @@ export async function middleware(request: NextRequest) {
       // Token invalid → redirect về /
       return NextResponse.redirect(new URL("/", request.url));
     }
-  } catch {
-    // Lỗi fetch → redirect về /
+  } catch (error) {
+    // Lỗi fetch (timeout, network, etc.) → trong production cho phép truy cập
+    // để tránh block toàn bộ site khi BE down
+    if (process.env.NODE_ENV === "production") {
+      console.error("Middleware auth check failed, allowing access:", error);
+      return NextResponse.next(); // Allow access in production if auth check fails
+    }
+    
+    // Development: redirect về /
     return NextResponse.redirect(new URL("/", request.url));
   }
 }
 
 export const config = {
   matcher: [
-    // "/user-manage/:path*",
-    // "/company-manage/:path*"
+    "/user-manage/:path*",
+    "/company-manage/:path*"
   ],
 };

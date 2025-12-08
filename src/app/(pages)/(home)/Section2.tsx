@@ -3,23 +3,17 @@
 
 import { CardCompanyItem } from "@/app/components/card/CardCompanyItem";
 import { CardCompanySkeleton } from "@/app/components/card/CardCompanySkeleton";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "@/utils/fetcher";
 
 export const Section2 = () => {
-  const [companyList, setCompanyList] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6`,
+    fetcher
+  );
 
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.code === "success") {
-          setCompanyList(data.companyList);
-        }
-      })
-      .catch((err) => console.error("Fetch company error:", err))
-      .finally(() => setLoading(false));
-  }, []);
+  const loading = isLoading;
+  const companyList = data?.code === "success" ? data.companyList : [];
 
   return (
     <div className="py-[60px]">
