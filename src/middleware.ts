@@ -13,10 +13,11 @@ export async function middleware(request: NextRequest) {
     // Lấy cookie header trình duyệt gửi đến FE
     const cookieHeader = request.headers.get("cookie") || "";
     
-    // Only log in development
-    if (process.env.NODE_ENV === "development") {
-      console.log("Cookie Header:", cookieHeader);
-    }
+    // Log cookie để debug
+    console.log("=== Middleware Debug ===");
+    console.log("Path:", pathname);
+    console.log("Cookie Header:", cookieHeader);
+    console.log("Has token cookie:", cookieHeader.includes("token="));
 
     // Gọi BE để check token với timeout
     const controller = new AbortController();
