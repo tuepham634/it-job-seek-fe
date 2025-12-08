@@ -71,7 +71,7 @@ export const CompanyList = () => {
 
         {/* Dữ liệu thật */}
         {!loading &&
-          companyList.map((item) => (
+          companyList.map((item: any) => (
             <CardCompanyItem key={item.id} item={item} />
           ))}
       </div>
