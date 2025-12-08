@@ -36,23 +36,23 @@ export async function middleware(request: NextRequest) {
     }
 
     const data = await res.json();
+    
+    // Log auth response for debugging
+    console.log("Auth check response:", data);
 
     if (data.code === "success") {
       // Token hợp lệ → cho phép truy cập page
       return NextResponse.next();
     } else {
       // Token invalid → redirect về /
+      console.log("Auth failed, redirecting to home");
       return NextResponse.redirect(new URL("/", request.url));
     }
   } catch (error) {
-    // Lỗi fetch (timeout, network, etc.) → trong production cho phép truy cập
-    // để tránh block toàn bộ site khi BE down
-    if (process.env.NODE_ENV === "production") {
-      console.error("Middleware auth check failed, allowing access:", error);
-      return NextResponse.next(); // Allow access in production if auth check fails
-    }
+    // Log error for debugging
+    console.error("Middleware auth check error:", error);
     
-    // Development: redirect về /
+    // Redirect to home on error
     return NextResponse.redirect(new URL("/", request.url));
   }
 }
