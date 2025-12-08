@@ -81,7 +81,7 @@ export const CVList = () => {
 
         {/* Hiển thị danh sách CV */}
         {!loading &&
-          listCV.map((item) => {
+          listCV.map((item: any) => {
             const jobPositionLabel = positionList.find(
               (itemPos) => itemPos.value === item.jobPosition
             )?.label;
