@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 import { positionList, workingFormList } from "@/config/variable";
 import { FiFileText } from "react-icons/fi";
@@ -70,7 +69,7 @@ export const CVList = () => {
         <>
           {/* Danh sách CV */}
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
-            {listCV.map((item) => {
+            {listCV.map((item: any) => {
               item.jobPosition = positionList.find(
                 (pos) => pos.value === item.jobPosition
               )?.label;

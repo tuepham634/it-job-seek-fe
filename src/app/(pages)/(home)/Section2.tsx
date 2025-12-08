@@ -26,7 +26,8 @@ export const Section2 = () => {
             ? Array(6)
                 .fill(0)
                 .map((_, i) => <CardCompanySkeleton key={i} />)
-            : companyList.map((item: any) => (
+            : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              companyList.map((item: any) => (
                 <CardCompanyItem key={item.id} item={item} />
               ))}
         </div>

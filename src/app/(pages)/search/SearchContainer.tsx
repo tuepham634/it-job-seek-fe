@@ -136,7 +136,7 @@ export const SearchContainer = () => {
       ) : (
         <>
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
-            {jobList.map((item) => (
+            {jobList.map((item: any) => (
               <CardJobItem key={item.id} item={item} />
             ))}
           </div>
