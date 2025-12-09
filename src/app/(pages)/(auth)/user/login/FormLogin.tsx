@@ -1,12 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
+import { api } from "@/utils/api";
 import JustValidate from "just-validate";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+
 export const FormLogin = () => {
-    const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const validator = new JustValidate("#loginForm");
@@ -48,34 +50,30 @@ export const FormLogin = () => {
           errorMessage: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt!',
         },
       ])
-      .onSuccess((event: any) => {
+      .onSuccess(async (event: any) => {
         const email = event.target.email.value;
         const password = event.target.password.value;
 
         const dataFinal = {
-          email: email,
-          password: password
+          email,
+          password
         };
-  
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataFinal),
-          credentials: "include" // Giữ cookie
-        })
-          .then(res => res.json())
-          .then(data => {
-            if(data.code == "error") {
-              alert(data.message);
-            }
-  
-            if(data.code == "success") {
-              router.push("/");
-              console.log("Đăng nhập thành công");
-            }
-          })
+
+        try {
+          const data = await api.post("/user/login", dataFinal);
+
+          if (data.code === "error") {
+            alert(data.message);
+          }
+
+          if (data.code === "success") {
+            router.push("/");
+            console.log("Đăng nhập thành công");
+          }
+        } catch (error: any) {
+          console.error(error);
+          alert("Có lỗi xảy ra. Vui lòng thử lại.");
+        }
       });
   }, []);
 

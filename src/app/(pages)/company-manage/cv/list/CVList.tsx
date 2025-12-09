@@ -12,7 +12,7 @@ export const CVList = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, mutate } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/company/cv/list?page=${page}`,
+    `/company/cv/list?page=${page}`,
     fetcherWithCredentials
   );
 
@@ -27,13 +27,13 @@ export const CVList = () => {
   };
 
   const handleDeleteSuccess = () => {
-    mutate(); // Revalidate SWR
+    mutate(); // Revalidate SWR sau khi xóa
   };
 
   return (
     <div className="container mx-auto px-[16px]">
       {/* Tổng số CV */}
-      {totalRecord !== undefined && totalRecord > 0 && (
+      {totalRecord && totalRecord > 0 && (
         <h2 className="font-[700] text-[28px] text-[#121212] mb-[30px]">
           Có tổng cộng {totalRecord} CV được gửi đến
         </h2>
@@ -70,17 +70,14 @@ export const CVList = () => {
           {/* Danh sách CV */}
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
             {listCV.map((item: any) => {
-              item.jobPosition = positionList.find(
-                (pos) => pos.value === item.jobPosition
-              )?.label;
-              item.jobWorkingForm = workingFormList.find(
-                (work) => work.value === item.jobWorkingForm
-              )?.label;
+              // Map position và workingForm
+              const jobPosition = positionList.find(pos => pos.value === item.jobPosition)?.label;
+              const jobWorkingForm = workingFormList.find(work => work.value === item.jobWorkingForm)?.label;
 
               return (
                 <CVItem
                   key={item.id}
-                  item={item}
+                  item={{ ...item, jobPosition, jobWorkingForm }}
                   onDeleteSuccess={handleDeleteSuccess}
                 />
               );
@@ -88,20 +85,18 @@ export const CVList = () => {
           </div>
 
           {/* Phân trang */}
-          {!loading && totalPage && totalPage > 1 && (
+          {totalPage && totalPage > 1 && (
             <div className="mt-[40px] flex justify-start">
               <select
                 className="border border-[#DEDEDE] rounded-[8px] py-[12px] px-[18px] font-[400] text-[16px] text-[#414042] shadow-sm hover:border-[#bdbdbd] transition-all"
                 value={page}
                 onChange={handlePagination}
               >
-                {Array(totalPage)
-                  .fill("")
-                  .map((_, index) => (
-                    <option key={index} value={index + 1}>
-                      Trang {index + 1}
-                    </option>
-                  ))}
+                {Array.from({ length: totalPage }, (_, index) => (
+                  <option key={index} value={index + 1}>
+                    Trang {index + 1}
+                  </option>
+                ))}
               </select>
             </div>
           )}

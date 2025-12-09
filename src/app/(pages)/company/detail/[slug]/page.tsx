@@ -1,62 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import { useEffect, useState } from "react";
-import { useParams, useSearchParams, useRouter } from "next/navigation";
+import useSWR from "swr";
+import { useSearchParams, useParams, useRouter } from "next/navigation";
 import { FaLocationDot } from "react-icons/fa6";
 import { CardJobItem } from "@/app/components/card/CardJobItem";
+import { fetcher } from "@/utils/fetcher";
 
 export default function CompanyDetailPage() {
-  const { slug } = useParams(); // slug chính là id
+  const { slug } = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
+
   const page = Number(searchParams.get("page")) || 1;
   const limit = 6;
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [companyDetail, setCompanyDetail] = useState<any>(null);
-  const [jobList, setJobList] = useState<any[]>([]);
-  const [pagination, setPagination] = useState<any>(null);
+  const { data, error, isLoading } = useSWR(
+    `/company/detail/${slug}?page=${page}&limit=${limit}`,
+    fetcher
+  );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/company/detail/${slug}?page=${page}&limit=${limit}`
-        );
-        const data = await res.json();
 
-        if (data.code !== "success") {
-          setError("Không tìm thấy công ty!");
-          setLoading(false);
-          return;
-        }
+  if (isLoading) return <div className="text-center py-10">Đang tải...</div>;
 
-        setCompanyDetail(data.companyDetail);
-        setJobList(data.jobList);
-        setPagination(data.pagination);
-        setLoading(false);
-      } catch (error) {
-        setError("Lỗi máy chủ!");
-        setLoading(false);
-      }
-    };
+  if (error || data?.code !== "success")
+    return <div className="text-center text-red-500 py-10">
+      Không tìm thấy công ty!
+    </div>;
 
-    fetchData();
-  }, [slug, page]);
+  const companyDetail = data.companyDetail;
+  const jobList = data.jobList;
+  const pagination = data.pagination;
 
   const handlePagination = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedPage = Number(e.target.value);
     router.push(`?page=${selectedPage}`, { scroll: false });
   };
-
-
-  if (loading) return <div className="text-center py-10">Đang tải...</div>;
-  if (error) return <div className="text-center text-red-500 py-10">{error}</div>;
 
   return (
     <div className="pt-[30px] pb-[60px]">
@@ -113,12 +93,11 @@ export default function CompanyDetailPage() {
           </h2>
 
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-[20px]">
-            {jobList.map((item) => (
+            {jobList.map((item: any) => (
               <CardJobItem key={item.id} item={item} />
             ))}
           </div>
 
-          {/* --- Phân trang (style giống bạn gửi) --- */}
           {pagination?.totalPages > 1 && (
             <div className="mt-[30px] flex justify-start">
               <select

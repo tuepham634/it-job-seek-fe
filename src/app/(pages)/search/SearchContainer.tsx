@@ -28,7 +28,7 @@ export const SearchContainer = () => {
   }, [language, city, company, keyword, position, workingForm]);
 
   const { data, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}&page=${page}`,
+    `/search?language=${language}&city=${city}&company=${company}&keyword=${keyword}&position=${position}&workingForm=${workingForm}&page=${page}`,
     fetcher
   );
 

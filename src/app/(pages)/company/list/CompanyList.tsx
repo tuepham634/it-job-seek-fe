@@ -9,34 +9,17 @@ export const CompanyList = () => {
   const [page, setPage] = useState(1);
   
   const { data, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6&page=${page}`,
+    `/company/list?limitItems=6&page=${page}`,
     fetcher,
     {
       revalidateOnFocus: false,
-      dedupingInterval: 60000 // Cache for 1 minute
+      dedupingInterval: 60000 
     }
   );
 
   const loading = isLoading;
   const companyList = data?.code === "success" ? data.companyList : [];
   const totalPage = data?.code === "success" ? data.totalPage : 0;
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6&page=${page}`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data.code === "success") {
-  //         setCompanyList(data.companyList);
-  //         setTotalPage(data.totalPage);
-  //       } else {
-  //         setCompanyList([]);
-  //       }
-  //     })
-  //     .finally(() => setLoading(false));
-  // }, [page]);
 
   const handlePagination = (event: any) => {
     setPage(parseInt(event.target.value));

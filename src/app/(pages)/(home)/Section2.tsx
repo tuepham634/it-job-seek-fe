@@ -7,7 +7,7 @@ import { fetcher } from "@/utils/fetcher";
 
 export const Section2 = () => {
   const { data, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/company/list?limitItems=6`,
+    `/company/list?limitItems=6`,
     fetcher
   );
 

@@ -19,7 +19,7 @@ export const CVList = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, mutate } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/user/cv/list?page=${page}`,
+    `/user/cv/list?page=${page}`,
     fetcherWithCredentials
   );
 

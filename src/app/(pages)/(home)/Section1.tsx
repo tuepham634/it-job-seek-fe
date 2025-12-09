@@ -10,7 +10,7 @@ export const Section1 = () => {
     const router = useRouter();
     
     const { data } = useSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/city/list`,
+        `/city/list`,
         fetcher
     );
     

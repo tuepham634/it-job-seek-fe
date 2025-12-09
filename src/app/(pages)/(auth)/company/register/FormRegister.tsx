@@ -4,6 +4,7 @@
 import JustValidate from "just-validate";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { api } from "@/utils/api"; 
 
 export const FormRegister = () => {
   const router = useRouter();
@@ -12,84 +13,59 @@ export const FormRegister = () => {
     const validator = new JustValidate("#registerForm");
 
     validator
-      .addField('#companyName', [
+      .addField("#companyName", [
+        { rule: "required", errorMessage: "Vui lòng nhập tên công ty!" },
         {
-          rule: 'required',
-          errorMessage: 'Vui lòng nhập tên công ty!'
-        },
-        {
-          rule: 'maxLength',
+          rule: "maxLength",
           value: 200,
-          errorMessage: 'Tên công ty không được vượt quá 200 ký tự!',
+          errorMessage: "Tên công ty không được vượt quá 200 ký tự!",
         },
       ])
-      .addField('#email', [
-        {
-          rule: 'required',
-          errorMessage: 'Vui lòng nhập email!',
-        },
-        {
-          rule: 'email',
-          errorMessage: 'Email không đúng định dạng!',
-        },
+      .addField("#email", [
+        { rule: "required", errorMessage: "Vui lòng nhập email!" },
+        { rule: "email", errorMessage: "Email không đúng định dạng!" },
       ])
-      .addField('#password', [
-        {
-          rule: 'required',
-          errorMessage: 'Vui lòng nhập mật khẩu!',
-        },
+      .addField("#password", [
+        { rule: "required", errorMessage: "Vui lòng nhập mật khẩu!" },
         {
           validator: (value: string) => value.length >= 8,
-          errorMessage: 'Mật khẩu phải chứa ít nhất 8 ký tự!',
+          errorMessage: "Mật khẩu phải chứa ít nhất 8 ký tự!",
         },
         {
           validator: (value: string) => /[A-Z]/.test(value),
-          errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái in hoa!',
+          errorMessage: "Mật khẩu phải chứa ít nhất một chữ cái in hoa!",
         },
         {
           validator: (value: string) => /[a-z]/.test(value),
-          errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái thường!',
+          errorMessage: "Mật khẩu phải chứa ít nhất một chữ cái thường!",
         },
         {
           validator: (value: string) => /\d/.test(value),
-          errorMessage: 'Mật khẩu phải chứa ít nhất một chữ số!',
+          errorMessage: "Mật khẩu phải chứa ít nhất một chữ số!",
         },
         {
           validator: (value: string) => /[@$!%*?&]/.test(value),
-          errorMessage: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt!',
+          errorMessage: "Mật khẩu phải chứa ít nhất một ký tự đặc biệt!",
         },
       ])
-      .onSuccess((event: any) => {
+      .onSuccess(async (event: any) => {
         const companyName = event.target.companyName.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
 
-        const dataFinal = {
-          companyName: companyName,
-          email: email,
-          password: password
-        };
-        console.log(dataFinal);
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataFinal),
-        })
-          .then(res => res.json())
-          .then(data => {
-            if(data.code == "error") {
-              alert(data.message);
-            }
-  
-            if(data.code == "success") {
-              router.push("/company/login");
-            }
-          })
+        const dataFinal = { companyName, email, password };
+
+        const data = await api.post("/company/register", dataFinal);
+
+        if (data.code === "error") {
+          alert(data.message);
+        }
+
+        if (data.code === "success") {
+          router.push("/company/login");
+        }
       });
   }, []);
-
 
   return (
     <>
@@ -108,6 +84,7 @@ export const FormRegister = () => {
             className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
           />
         </div>
+
         <div className="">
           <label
             htmlFor="email"
@@ -122,6 +99,7 @@ export const FormRegister = () => {
             className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
           />
         </div>
+
         <div className="">
           <label
             htmlFor="password"
@@ -136,6 +114,7 @@ export const FormRegister = () => {
             className="w-[100%] h-[46px] border border-[#DEDEDE] rounded-[4px] py-[14px] px-[20px] font-[500] text-[14px] text-black"
           />
         </div>
+
         <div className="">
           <button className="bg-[linear-gradient(90deg,#00c6ff_0%,#0072ff_100%)] rounded-[4px] w-[100%] h-[48px] px-[20px] font-[700] text-[16px] text-white">
             Đăng ký

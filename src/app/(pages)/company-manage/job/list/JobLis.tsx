@@ -9,7 +9,7 @@ import { Briefcase, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import useSWR from "swr";
-import { fetcher } from "@/utils/fetcher";
+import {fetcherWithCredentials } from "@/utils/fetcher";
 
 export const JobList = () => {
   const [page, setPage] = useState(1);
@@ -17,8 +17,8 @@ export const JobList = () => {
   const [workingForm, setWorkingForm] = useState("");
 
   const { data, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/company/job/list?page=${page}&position=${position}&workingForm=${workingForm}`,
-    fetcher
+    `/company/job/list?page=${page}&position=${position}&workingForm=${workingForm}`,
+    fetcherWithCredentials,
   );
 
   const loading = isLoading;
