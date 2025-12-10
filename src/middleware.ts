@@ -10,21 +10,27 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Lấy cookie header trình duyệt gửi đến FE
-    const cookieHeader = request.headers.get("cookie") || "";
+    // Lấy token từ cookies
+    const token = request.cookies.get("token")?.value;
     
-    // Log cookie để debug
     console.log("=== Middleware Debug ===");
     console.log("Path:", pathname);
-    console.log("Cookie Header:", cookieHeader);
-    console.log("Has token cookie:", cookieHeader.includes("token="));
+    console.log("Has token:", !!token);
+
+    if (!token) {
+      console.log("No token found, redirecting to home");
+      return NextResponse.redirect(new URL("/", request.url));
+    }
 
     // Gọi BE để check token với timeout
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/check`, {
-      headers: { cookie: cookieHeader },
+      headers: { 
+        "Cookie": `token=${token}`,
+        "Content-Type": "application/json"
+      },
       credentials: "include",
       signal: controller.signal,
     });
@@ -32,20 +38,16 @@ export async function middleware(request: NextRequest) {
     clearTimeout(timeoutId);
 
     if (!res.ok) {
-      // HTTP error → redirect to home
+      console.log("Backend returned error:", res.status);
       return NextResponse.redirect(new URL("/", request.url));
     }
 
     const data = await res.json();
-    
-    // Log auth response for debugging
     console.log("Auth check response:", data);
 
     if (data.code === "success") {
-      // Token hợp lệ → cho phép truy cập page
       return NextResponse.next();
     } else {
-      // Token invalid → redirect về /
       console.log("Auth failed, redirecting to home");
       return NextResponse.redirect(new URL("/", request.url));
     }
