@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://it-job-seek.onrender.com/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
